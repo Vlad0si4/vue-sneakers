@@ -10,3 +10,21 @@ export const fetchAllItems = async () => {
     console.error(error)
   }
 }
+
+export const fetchSortThunk = async (sortBy) => {
+  try {
+    const response = await axios.get(`${BASE_URL}?sortBy=${sortBy}`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const fetchSearchThunk = async (word) => {
+  try {
+    const response = await axios.get(`${BASE_URL}?search=${word}`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
