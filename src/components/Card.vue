@@ -1,12 +1,13 @@
 <script setup>
 defineProps({
   imgUrl: String,
+  id: Number,
   title: String,
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onClickFavorite: Function,
-  onClickAdded: Function
+  onClickAdded: Function,
+  onClickFavorite: Function
 })
 </script>
 
@@ -16,11 +17,11 @@ defineProps({
   >
     <img
       @click="onClickFavorite"
-      :src="!isFavorite ? '/like-2.svg' : '/like-1.svg'"
+      :src="isFavorite ? '/like-2.svg' : '/like-1.svg'"
       alt="like"
       class="absolute top-5 left-5"
     />
-    <img :src="imgUrl" alt="sneaker" class="" />
+    <img :src="imgUrl" alt="sneaker" class="w-56 h-36" />
     <p class="mt-2">{{ title }}</p>
 
     <div class="flex justify-between mt-5">
@@ -28,7 +29,7 @@ defineProps({
         <span class="text-slate-400">Price:</span>
         <span class="font-bold">{{ price }} $</span>
       </div>
-      <img @click="onClickAdded" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="plus" />
+      <img @click="onClickAdded" :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="plus" />
     </div>
   </div>
 </template>

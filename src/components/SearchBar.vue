@@ -1,17 +1,18 @@
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { defineEmits, reactive } from 'vue'
 
-const onSelectChange = ref('')
-const onSearchChange = ref('')
+const filter = reactive({
+  onSelectChange: 'name',
+  onSearchChange: ''
+})
 
 const emit = defineEmits(['select-change', 'search-change'])
 
 const handleSelectChange = () => {
-  emit('select-change', onSelectChange.value)
+  emit('select-change', filter.onSelectChange)
 }
 const handleSearch = () => {
-  emit('search-change', onSearchChange.value)
-  onSearchChange.value = ''
+  emit('search-change', filter.onSearchChange)
 }
 </script>
 
@@ -20,7 +21,7 @@ const handleSearch = () => {
     <h2 class="text-3xl font-bold pb-5 md:pb-0">All sneakers</h2>
     <div class="flex gap-4">
       <select
-        v-model="onSelectChange"
+        v-model="filter.onSelectChange"
         @change="handleSelectChange"
         class="py-2 px-3 border rounded outline-none"
       >
@@ -34,8 +35,8 @@ const handleSearch = () => {
         <input
           class="border rounded-md py-2 pl-8 pr-4 outline-none focus:border-gray-400"
           placeholder="search"
-          v-model="onSearchChange"
-          @change="handleSearch"
+          v-model="filter.onSearchChange"
+          @keyup="handleSearch"
         />
       </div>
     </div>

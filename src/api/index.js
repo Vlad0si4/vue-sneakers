@@ -28,3 +28,36 @@ export const fetchSearchThunk = async (word) => {
     console.error(error)
   }
 }
+
+export const fetchFavorites = async () => {
+  try {
+    const response = await axios.get('https://65a83e3694c2c5762da88316.mockapi.io/favorites')
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const AddFavoritesThunk = async (id) => {
+  try {
+    const { data } = await axios.post('https://65a83e3694c2c5762da88316.mockapi.io/favorites', {
+      productId: id
+    })
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const DeleteFavoritesThunk = async (id) => {
+  try {
+    const { data } = await axios.delete(
+      `https://65a83e3694c2c5762da88316.mockapi.io/favorites/${id}`
+    )
+
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
