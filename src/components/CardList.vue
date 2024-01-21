@@ -6,7 +6,7 @@ defineProps({
   items: Array
 })
 
-const emit = defineEmits(['addToFavorite'])
+const emit = defineEmits(['addToFavorite', 'addToCardDrawer'])
 
 //provider
 // const addToFavorite = inject('addToFavorite')
@@ -21,9 +21,10 @@ const emit = defineEmits(['addToFavorite'])
       :imgUrl="item.imageUrl"
       :title="item.name"
       :price="item.price"
-      :isAdded="false"
-      :isFavorite="item.isFavorite"
+      :isAdded="item.isAdded"
+      :isFavorite="item.isFavorites"
       :onClickFavorite="() => emit('addToFavorite', item)"
+      :onClickAdded="() => emit('addToCardDrawer', item)"
     />
   </div>
 </template>
