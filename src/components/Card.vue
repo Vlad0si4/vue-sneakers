@@ -21,7 +21,7 @@ defineProps({
       alt="like"
       class="absolute top-5 left-5"
     />
-    <img :src="imgUrl" alt="sneaker" class="w-56 h-36" />
+    <img :src="imgUrl" alt="sneaker" class="w-auto" />
     <p class="mt-2">{{ title }}</p>
 
     <div class="flex justify-between mt-5">
