@@ -42,3 +42,18 @@ const handleSearch = () => {
     </div>
   </div>
 </template>
+
+<!-- const isDisabledButton = computed(() => (props.isLoading ? true : props.totalPrice ? false : true)) -->
+
+<!-- filters,
+  async () => {
+    await fetchItems()
+
+    items.value = items.value.map((el) => ({
+      ...el,
+      isAdded: cartDrawer.value.some((cartItem) => cartItem.id === el.id)
+    }))
+  },
+  {
+    deep: true
+  } -->

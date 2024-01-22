@@ -1,5 +1,8 @@
 <script setup>
-const emit = defineEmits(['toggleDrawer'])
+defineProps({
+  totalPrice: Number
+})
+const emit = defineEmits(['openDrawer'])
 </script>
 
 <template>
@@ -14,11 +17,11 @@ const emit = defineEmits(['toggleDrawer'])
 
     <ul class="flex items-center gap-5 cursor-pointer">
       <li
-        @click="() => emit('toggleDrawer')"
+        @click="() => emit('openDrawer')"
         class="flex items-center gap-3 text-gray-500 font-bold hover:text-black"
       >
         <img src="/cart.svg" alt="cart" />
-        <p>300$</p>
+        <p>{{ totalPrice }} $</p>
       </li>
       <li class="flex items-center gap-3 font-medium text-gray-500 hover:text-black">
         <img src="/heart.svg" alt="cart" />

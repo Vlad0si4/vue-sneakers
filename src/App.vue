@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 // import {
 //   fetchSortThunk,
@@ -18,32 +18,67 @@ import Drawer from './components/Drawer.vue'
 
 const items = ref([])
 const cartDrawer = ref([])
-
-const drawerOpen = ref(false)
-
-const toggleDrawer = () => {
-  drawerOpen.value = !drawerOpen.value
-}
-const addToCardDrawer = (item) => {
-  if (!item.isAdded) {
-    cartDrawer.value.push(item)
-    item.isAdded = true
-  } else {
-    cartDrawer.value.splice(cartDrawer.value.indexOf(item), -1)
-    item.isAdded = false
-  }
-
-  console.log(cartDrawer)
-}
+const isLoading = ref(false)
 
 const filters = reactive({
   sortBy: 'name',
   searchQuery: ''
 })
 
+const drawerOpen = ref(false)
+// https://65ae15e41dfbae409a73e85f.mockapi.io/orders
+
+const createOrder = async () => {
+  try {
+    isLoading.value = true
+    const { data } = await axios.post('https://65ae15e41dfbae409a73e85f.mockapi.io/orders', {
+      items: cartDrawer.value,
+      totalPrice: totalPrice.value
+    })
+    cartDrawer.value = []
+    return data
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const closeDrawer = () => {
+  drawerOpen.value = false
+}
+const openDrawer = () => {
+  drawerOpen.value = true
+}
+
+const addToCardDrawer = (item) => {
+  if (!item.isAdded) {
+    onClickAdd(item)
+  } else {
+    onClickRemove(item)
+  }
+}
+const onClickAdd = (item) => {
+  cartDrawer.value.push(item)
+  item.isAdded = true
+}
+
+const onClickRemove = (item) => {
+  cartDrawer.value.splice(cartDrawer.value.indexOf(item), 1)
+  item.isAdded = false
+}
+
+const totalPrice = computed(() => {
+  if (cartDrawer.value.length === 0) {
+    return 0
+  }
+  return cartDrawer.value.reduce((acc, el) => acc + el.price, 0)
+})
+
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
 }
+
 const onChangeSearch = (event) => {
   filters.searchQuery = event.target.value
 }
@@ -87,7 +122,6 @@ const fetchFavorites = async () => {
       return {
         ...item,
         isFavorites: true,
-
         productId: favorite.id
       }
     })
@@ -119,75 +153,64 @@ const addToFavorite = async (item) => {
 }
 
 onMounted(async () => {
+  const localCart = localStorage.getItem('cart')
+  cartDrawer.value = localCart ? JSON.parse(localCart) : []
+
   await fetchItems()
   await fetchFavorites()
+
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: cartDrawer.value.some((cartItem) => cartItem.id === item.id)
+  }))
 })
 
-watch(filters, fetchItems)
+watch(
+  filters,
+  async () => {
+    await fetchItems()
 
-// const addToFavorite = async (item) => {
-//   if (!item.isFavorite) {
-//     item.isFavorite = true
-//     const data = await AddFavoritesThunk(item.id)
-//     item.productId = data.id
-//   } else {
-//     item.isFavorite = false
-//     const deleteData = await DeleteFavoritesThunk(item.productId)
-//     item.productId = null
-//     return deleteData
-//   }
-// }
+    items.value = items.value.map((el) => ({
+      ...el,
+      isAdded: cartDrawer.value.some((cartItem) => cartItem.id === el.id)
+    }))
+  },
+  {
+    deep: true
+  }
+)
 
-// const fetchItems = async () => {
-//   const data = await fetchAllItems()
+watch(cartDrawer, () => {
+  items.value = items.value.map((el) => ({ ...el, isAdded: false }))
+})
 
-//   items.value = data.map((obj) => ({
-//     ...obj,
-//     isFavorite: false,
-//     productId: null,
-//     isAdded: false
-//   }))
-// }
-// fetchItems()
-// const fetchAllFavorites = async () => {
-//   const { data: favorites } = await fetchFavorites()
+watch(
+  cartDrawer,
+  () => {
+    localStorage.setItem('cart', JSON.stringify(cartDrawer.value))
+  },
+  { deep: true }
+)
 
-//   items.value = items.value.map((item) => {
-//     const favoriteArray = Array.isArray(favorites) ? favorites : []
-//     const favorite = favoriteArray.find((favorite) => favorite.productId === item.id)
-
-//     if (!favorite) {
-//       return item
-//     }
-
-//     return {
-//       ...item,
-//       isFavorite: true,
-//       productId: favorite.id
-//     }
-//   })
-// }
-
-// const handleSelectChange = async (selectedValue) => {
-//   items.value = await fetchSortThunk(selectedValue)
-// }
-
-// const handleSearch = async (words) => {
-//   items.value = await fetchSearchThunk(words)
-// }
-
-// watch(items, async () => {
-//   fetchAllFavorites()
-// })
-
-provide('toggleDrawer', toggleDrawer)
+provide('cart', {
+  cartDrawer,
+  closeDrawer,
+  openDrawer,
+  onClickAdd,
+  onClickRemove
+})
 </script>
 
 <template>
-  <Drawer v-if="drawerOpen" />
+  <Drawer
+    v-if="drawerOpen"
+    :total-price="totalPrice"
+    @create-order="createOrder"
+    :is-loading="isLoading"
+  />
 
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
-    <Header @toggle-drawer="toggleDrawer" />
+    <Header :total-price="totalPrice" @open-drawer="openDrawer" />
     <main class="p-8">
       <!-- <SearchBar @select-change="handleSelectChange" @search-change="handleSearch" /> -->
 
