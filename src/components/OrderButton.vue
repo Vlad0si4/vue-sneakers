@@ -17,12 +17,12 @@ const isDisabledButton = computed(() => props.totalPrice === 0)
       <span class="flex-1 border-b border-dashed"></span>
       <p class="font-bold text-xl">{{ totalPrice }}$</p>
     </div>
-    <div class="">
+    <div class="flex items-center justify-center">
       <button
         @click="() => emit('createOrder')"
         :disabled="isDisabledButton"
         type="submit"
-        class="bg-lime-500 w-full rounded-xl py-3 text-white hover:bg-lime-600 transition cursor-pointer disabled:bg-slate-400"
+        class="bg-lime-500 w-60 h-11 rounded-xl text-white hover:bg-lime-600 transition cursor-pointer disabled:bg-slate-400"
       >
         Order
       </button>

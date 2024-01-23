@@ -140,7 +140,7 @@ watch(
 <template>
   <div class="flex flex-col items-center justify-between pb-10 md:flex-row">
     <h2 class="text-3xl font-bold pb-5 md:pb-0">All sneakers</h2>
-    <div class="flex gap-4">
+    <div class="flex gap-4 flex-col sm:flex-row">
       <select @change="onChangeSelect" class="py-2 px-3 border rounded outline-none">
         <option value="name">Name</option>
         <option value="price">Price</option>

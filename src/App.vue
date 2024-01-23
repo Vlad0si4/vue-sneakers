@@ -83,7 +83,7 @@ provide('cart', {
 
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
     <Header :total-price="totalPrice" @open-drawer="openDrawer" />
-    <main class="p-8">
+    <main class="p-8 fle">
       <router-view></router-view>
       <!-- <Home /> -->
       <!-- <SearchBar @select-change="handleSelectChange" @search-change="handleSearch" /> -->
