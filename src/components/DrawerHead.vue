@@ -14,6 +14,6 @@ const { closeDrawer } = inject('cart')
       height="15"
       class="rotate-180 cursor-pointer opacity-30 hover:opacity-100 hover:-translate-x-1 hover:-rotate-0 transition"
     />
-    <h2 class="text-2xl font-bold">Drawer</h2>
+    <h2 class="text-2xl font-bold">Cart</h2>
   </div>
 </template>

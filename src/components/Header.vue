@@ -20,21 +20,25 @@ const emit = defineEmits(['openDrawer'])
       <ul class="flex items-center gap-5 cursor-pointer">
         <li
           @click="() => emit('openDrawer')"
-          class="text-gray-500 font-bold hover:text-black flex flex-col gap-2 items-center"
+          class="text-gray-500 font-bold hover:text-black flex flex-col gap-2 items-center md:flex-row md:gap-4"
         >
           <img src="/cart.svg" alt="cart" />
           <p>{{ totalPrice }} $</p>
         </li>
         <router-link to="/favorites"
-          ><li class="font-medium text-gray-500 hover:text-black flex flex-col gap-2 items-center">
+          ><li
+            class="font-medium text-gray-500 hover:text-black flex flex-col gap-2 items-center md:flex-row md:gap-4"
+          >
             <img src="/heart.svg" alt="cart" />
             <p>Favorites</p>
           </li></router-link
         >
         <router-link to="/profile"
-          ><li class="font-medium text-gray-500 hover:text-black flex flex-col gap-2 items-center">
+          ><li
+            class="font-medium text-gray-500 hover:text-black flex flex-col gap-2 items-center md:flex-row md:gap-4"
+          >
             <img src="/profile.svg" alt="cart" />
-            <p>Profile</p>
+            <p>My Orders</p>
           </li></router-link
         >
       </ul>

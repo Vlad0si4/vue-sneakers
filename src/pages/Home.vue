@@ -1,31 +1,22 @@
 <script setup>
-import { inject, onMounted, reactive, ref, watch } from 'vue'
+import { inject, onMounted, reactive, watch } from 'vue'
 import CardList from '../components/CardList.vue'
 import axios from 'axios'
 
-const { cartDrawer, onClickAdd, onClickRemove } = inject('cart')
+const { cartDrawer, addToCardDrawer, items } = inject('cart')
 
-const items = ref([])
 const filters = reactive({
   sortBy: 'name',
   searchQuery: ''
 })
 
-const addToCardDrawer = (item) => {
-  if (!item.isAdded) {
-    onClickAdd(item)
-  } else {
-    onClickRemove(item)
-  }
-}
-
 const addToFavorite = async (item) => {
-  // item.isFavorites = !item.isFavorites
   try {
     if (!item.isFavorites) {
       item.isFavorites = true
       const { data } = await axios.post('https://65a83e3694c2c5762da88316.mockapi.io/favorites', {
-        productId: item.id
+        productId: item.id,
+        item
       })
 
       item.productId = data.id
@@ -128,7 +119,6 @@ watch(
     items.value = items.value.map((el) => ({
       ...el,
       isAdded: cartDrawer.value.some((cartItem) => cartItem.id === el.id)
-      // isFavorites: cartDrawer.value.some((cartItem) => cartItem.id === el.id)
     }))
   },
   {

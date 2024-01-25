@@ -18,7 +18,7 @@ const emit = defineEmits(['createOrder'])
   <div class="bg-white w-screen sm:w-auto h-full fixed right-0 top-0 z-20 p-8">
     <DrawerHead />
     <div v-if="!totalPrice" class="flex h-full items-center">
-      <InfoBlock title="корзина пустая" description="добавте товар" imageUrl="/package-icon.png" />
+      <InfoBlock title="Cart empty" description="add a product" imageUrl="/package-icon.png" />
     </div>
     <div v-else>
       <CardDrawerList />

@@ -18,9 +18,40 @@ import Header from './components/Header.vue'
 import Drawer from './components/Drawer.vue'
 
 const cartDrawer = ref([])
+const items = ref([])
 const isLoading = ref(false)
 const drawerOpen = ref(false)
 // https://65ae15e41dfbae409a73e85f.mockapi.io/orders
+
+// const addToFavorite = async (item) => {
+//   // item.isFavorites = !item.isFavorites
+//   try {
+//     if (!item.isFavorites) {
+//       item.isFavorites = true
+//       const { data } = await axios.post('https://65a83e3694c2c5762da88316.mockapi.io/favorites', {
+//         productId: item.id,
+//         item
+//       })
+
+//       item.productId = data.id
+//     } else {
+//       item.isFavorites = false
+//       await axios.delete(`https://65a83e3694c2c5762da88316.mockapi.io/favorites/${item.productId}`)
+
+//       item.productId = null
+//     }
+//   } catch (error) {
+//     console.error(error)
+//   }
+// }
+
+const addToCardDrawer = (item) => {
+  if (!item.isAdded) {
+    onClickAdd(item)
+  } else {
+    onClickRemove(item)
+  }
+}
 
 const onClickAdd = (item) => {
   cartDrawer.value.push(item)
@@ -40,6 +71,7 @@ const createOrder = async () => {
       totalPrice: totalPrice.value
     })
     cartDrawer.value = []
+
     return data
   } catch (error) {
     console.log(error)
@@ -62,14 +94,16 @@ const totalPrice = computed(() => {
   return cartDrawer.value.reduce((acc, el) => acc + el.price, 0)
 })
 
-// watch(filters, addToCardDrawer)
-
 provide('cart', {
   cartDrawer,
+  items,
   closeDrawer,
   openDrawer,
+
+  addToCardDrawer,
   onClickAdd,
   onClickRemove
+  // addToFavorite
 })
 </script>
 
@@ -85,8 +119,6 @@ provide('cart', {
     <Header :total-price="totalPrice" @open-drawer="openDrawer" />
     <main class="p-8 fle">
       <router-view></router-view>
-      <!-- <Home /> -->
-      <!-- <SearchBar @select-change="handleSelectChange" @search-change="handleSearch" /> -->
     </main>
   </div>
 </template>

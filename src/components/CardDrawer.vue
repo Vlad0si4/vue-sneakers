@@ -5,7 +5,8 @@ defineProps({
   imgUrl: String,
   id: Number,
   title: String,
-  price: Number
+  price: Number,
+  isAdded: Boolean
 })
 </script>
 
@@ -19,6 +20,7 @@ defineProps({
       <div class="flex justify-between mt-3">
         <p class="font-bold text-xl">{{ price }}$</p>
         <img
+          v-if="!isAdded"
           src="/close.svg"
           alt="close"
           class="opacity-40 hover:opacity-100 cursor-pointer"
